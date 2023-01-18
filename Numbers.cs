@@ -52,17 +52,16 @@ namespace Mutex_Semaphore
         {
             for(int i =2; i < digit; i++) {
 
-                if (digit % i == 7)
+                if (digit % i == 0)
                 {
-                    return true;
+                    return false;
                 }
             }
-
-            return false;
+            return true;
         }
         private bool IsLastDigitSeven(int digit)
         {
-            return (digit % 10 == 0)?true:false;
+            return (digit % 10 == 7)?true:false;
         }
 
         public void WriteFileLastDigitsSeven(object? data)
@@ -90,10 +89,10 @@ namespace Mutex_Semaphore
                     {
                         if (IsLastDigitSeven(i))
                         {
-                            buffer2[j++] = Convert.ToByte(i);
+                            buffer2[j++] = BitConverter.GetBytes(i);
                         }
                     }
-                    fs.Write(buffer2);
+                    fs.Write(buffer2, 0, buffer2.Length);
                 }
             }catch(Exception ex) { Console.WriteLine(ex.Message.ToString()); }    
             finally { mutexObj.ReleaseMutex(); }
@@ -112,7 +111,7 @@ namespace Mutex_Semaphore
                 using (FileStream fs = File.OpenWrite("RandomDigit.bin"))
                 {
                     byte[] buffer = list.SelectMany(i => BitConverter.GetBytes(i)).ToArray();
-                    fs.Write(buffer);
+                    fs.Write(buffer, 0, buffer.Length);
                 }
 
             }
